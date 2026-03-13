@@ -8,4 +8,8 @@ __pycache__/
 *.pyo
 .\src\db.sqlite3
 .\src\manage.py
-
+.\src\account\migrations
+.\src\patients\migrations
+.\src\doctors\migrations
+.\src\appointments\migrations
+.\src\billing\migrations
