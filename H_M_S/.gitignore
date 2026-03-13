@@ -1,0 +1,11 @@
+# created by virtualenv automatically
+*.log
+.\Lib
+.\Scripts
+pyvenv.cfg
+__pycache__/
+*.pyc
+*.pyo
+.\src\db.sqlite3
+.\src\manage.py
+
