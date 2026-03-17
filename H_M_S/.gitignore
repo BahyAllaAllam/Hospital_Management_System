@@ -8,6 +8,7 @@ __pycache__/
 *.pyo
 .\src\db.sqlite3
 .\src\manage.py
+.\src\H_M_S\settings.py
 .\src\account\migrations
 .\src\patients\migrations
 .\src\doctors\migrations
