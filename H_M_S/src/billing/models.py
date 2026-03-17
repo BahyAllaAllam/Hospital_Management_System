@@ -1,8 +1,8 @@
 from django.db import models
-
 from django.db import models
 from patients.models import Patient
 from appointments.models import Appointment
+
 
 class Invoice(models.Model):
     STATUS = (
