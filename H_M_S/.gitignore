@@ -14,3 +14,4 @@ __pycache__/
 .\src\doctors\migrations
 .\src\appointments\migrations
 .\src\billing\migrations
+.\src\medical_records\migrations
