@@ -16,6 +16,7 @@ class Appointment(models.Model):
     date = models.DateField()
     time = models.TimeField()
     status = models.CharField(max_length=15, choices=STATUS, default='pending')
+    is_available = models.BooleanField(default=True)
     reason = models.TextField()
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

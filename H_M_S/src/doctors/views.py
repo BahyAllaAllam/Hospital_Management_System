@@ -1,16 +1,35 @@
-from django.shortcuts import render
-
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from .models import Doctor, Department
 from .serializers import DoctorSerializer, DepartmentSerializer
+from accounts.permissions import IsAdmin, IsDoctor
 
 class DepartmentViewSet(viewsets.ModelViewSet):
-    queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
-    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Department.objects.all()
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsAuthenticated()]
+        return [IsAuthenticated(), IsAdmin()]
+
 
 class DoctorViewSet(viewsets.ModelViewSet):
-    queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
-    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 'doctor':
+            return Doctor.objects.select_related('user', 'department').filter(user=user)
+        return Doctor.objects.select_related('user', 'department').all()
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsAuthenticated()]
+        if self.action in ['update', 'partial_update']:
+            return [IsAuthenticated(), IsDoctor()]
+        if self.action in ['create', 'destroy']:
+            return [IsAuthenticated(), IsAdmin()]
+        return [IsAuthenticated(), IsAdmin()]
