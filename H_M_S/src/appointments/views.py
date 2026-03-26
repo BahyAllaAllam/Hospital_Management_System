@@ -1,11 +1,17 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from .models import Appointment
-from .serializers import AppointmentSerializer
+from rest_framework.response import Response
+from .serializers import AppointmentSerializer, AppointmentSlotSerializer
 from accounts.permissions import IsAdmin, IsReceptionist, IsPatient, IsDoctor, IsNurse
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     serializer_class = AppointmentSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return AppointmentSlotSerializer
+        return AppointmentSerializer
 
     def get_queryset(self):
         user = self.request.user
@@ -35,21 +41,28 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         user = request.user
 
         if user.role == 'receptionist':
-            # receptionist can only assign or remove a patient
+            allowed_fields = {'patient', 'reason', 'notes'}
+            if set(request.data.keys()) - allowed_fields:
+                return Response(
+                    {'error': 'Receptionist can only assign a patient, reason and notes'},
+                    status=status.HTTP_403_FORBIDDEN
+                )
             if 'patient' in request.data:
                 patient = request.data.get('patient')
                 if patient is None:
-                    # remove patient from slot
                     appointment.patient = None
                     appointment.is_available = True
                     appointment.status = 'pending'
+                    appointment.reason = ''
+                    appointment.notes = ''
                     appointment.save()
                     return Response(AppointmentSerializer(appointment).data)
                 elif appointment.is_available:
-                    # assign patient to slot
                     appointment.patient_id = patient
                     appointment.is_available = False
                     appointment.status = 'confirmed'
+                    appointment.reason = request.data.get('reason', '')
+                    appointment.notes = request.data.get('notes', '')
                     appointment.save()
                     return Response(AppointmentSerializer(appointment).data)
                 else:
@@ -57,8 +70,4 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                         {'error': 'This slot is not available'},
                         status=status.HTTP_400_BAD_REQUEST
                     )
-            return Response(
-                {'error': 'Receptionist can only assign or remove a patient'},
-                status=status.HTTP_403_FORBIDDEN
-            )
         return super().partial_update(request, *args, **kwargs)

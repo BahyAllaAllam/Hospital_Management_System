@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import Invoice, InvoiceItem
 from .serializers import InvoiceSerializer, InvoiceItemSerializer
-from accounts.permissions import IsAdmin, IsAdminOrSupervisor, IsReceptionist, IsAccountant, IsPatient
+from accounts.permissions import IsAdmin, IsAdminOrSupervisor, IsReceptionist, IsAccountant, IsPatient, CanAccessBilling
 
 class InvoiceViewSet(viewsets.ModelViewSet):
     serializer_class = InvoiceSerializer
@@ -21,7 +21,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
-            return [IsAuthenticated()]
+            return [IsAuthenticated(), CanAccessBilling()]
         if self.action == 'create':
             return [IsAuthenticated(), IsReceptionist()]
         if self.action in ['update', 'partial_update']:

@@ -2,7 +2,7 @@ from rest_framework.permissions import BasePermission
 
 class IsAdmin(BasePermission):
     def has_permission(self, request, view):
-        return request.user.role == 'admin'
+        return request.user.role == 'admin' or request.user.is_superuser
 
 class IsSupervisor(BasePermission):
     def has_permission(self, request, view):
@@ -39,3 +39,7 @@ class IsRadiology(BasePermission):
 class IsAdminOrSupervisor(BasePermission):
     def has_permission(self, request, view):
         return request.user.role in ['admin', 'supervisor']
+
+class CanAccessBilling(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.role in ['admin', 'supervisor', 'receptionist', 'accountant', 'patient']

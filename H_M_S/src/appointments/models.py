@@ -11,7 +11,7 @@ class Appointment(models.Model):
         ('cancelled', 'Cancelled'),
         ('completed', 'Completed'),
     )
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField()
