@@ -4,8 +4,8 @@ from .views import InvoiceViewSet, InvoiceItemViewSet
 
 
 router = DefaultRouter()
-router.register('items', InvoiceItemViewSet)
-router.register('', InvoiceViewSet)
+router.register('items', InvoiceItemViewSet, basename='invoice-item')
+router.register('', InvoiceViewSet, basename='invoice')
 
 urlpatterns = [
     path('', include(router.urls)),

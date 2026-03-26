@@ -4,10 +4,10 @@ from .views import MedicalRecordViewSet, DoctorNoteViewSet, NurseNoteViewSet, La
 
 
 router = DefaultRouter()
-router.register('doctor-notes', DoctorNoteViewSet)
-router.register('nurse-notes', NurseNoteViewSet)
-router.register('lab-results', LabResultViewSet)
-router.register('', MedicalRecordViewSet)
+router.register('doctor-notes', DoctorNoteViewSet, basename='doctor-note')
+router.register('nurse-notes', NurseNoteViewSet, basename='nurse-note')
+router.register('lab-results', LabResultViewSet, basename='lab-result')
+router.register('', MedicalRecordViewSet, basename='medical-record')
 
 urlpatterns = [
     path('', include(router.urls)),
