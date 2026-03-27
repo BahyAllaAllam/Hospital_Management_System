@@ -4,9 +4,9 @@ from .models import Doctor, Department
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = '__all__'
+        exclude = ['id']
 
 class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
-        fields = '__all__'
+        exclude = ['id']

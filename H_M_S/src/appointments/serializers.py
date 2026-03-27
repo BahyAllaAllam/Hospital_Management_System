@@ -11,4 +11,4 @@ class AppointmentSlotSerializer(serializers.ModelSerializer):
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        exclude = ['created_at']
+        exclude = ['created_at', 'id']

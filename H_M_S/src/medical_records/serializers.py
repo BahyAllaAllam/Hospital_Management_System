@@ -5,17 +5,17 @@ from .models import MedicalRecord, DoctorNote, NurseNote, LabResult
 class DoctorNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = DoctorNote
-        fields = '__all__'
+        exclude = ['id']
 
 class NurseNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = NurseNote
-        fields = '__all__'
+        exclude = ['id']
 
 class LabResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = LabResult
-        fields = '__all__'
+        exclude = ['id']
 
 class MedicalRecordSerializer(serializers.ModelSerializer):
     doctor_notes = DoctorNoteSerializer(many=True, read_only=True)
@@ -24,4 +24,4 @@ class MedicalRecordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MedicalRecord
-        fields = '__all__'
+        exclude = ['id']
