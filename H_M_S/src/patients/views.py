@@ -6,6 +6,10 @@ from accounts.permissions import IsAdmin, IsDoctor, IsNurse, IsReceptionist, IsP
 
 class PatientViewSet(viewsets.ModelViewSet):
     serializer_class = PatientSerializer
+    filterset_class = PatientFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['user__first_name', 'user__last_name', 'user__email']
+    ordering_fields = ['user__first_name', 'user__last_name']
 
     def get_queryset(self):
         user = self.request.user
