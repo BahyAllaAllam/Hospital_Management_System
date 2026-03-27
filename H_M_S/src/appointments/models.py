@@ -1,5 +1,5 @@
 from django.db import models
-from django.db import models
+import uuid
 from patients.models import Patient
 from doctors.models import Doctor
 
@@ -11,6 +11,7 @@ class Appointment(models.Model):
         ('cancelled', 'Cancelled'),
         ('completed', 'Completed'),
     )
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     date = models.DateField()

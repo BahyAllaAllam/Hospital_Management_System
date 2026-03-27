@@ -1,9 +1,9 @@
 from django.db import models
-
-from django.db import models
+import uuid
 from accounts.models import User
 
 class Department(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
 
@@ -11,6 +11,7 @@ class Department(models.Model):
         return self.name
 
 class Doctor(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
     specialization = models.CharField(max_length=100)
@@ -19,3 +20,4 @@ class Doctor(models.Model):
 
     def __str__(self):
         return f"Dr. {self.user.get_full_name()} - {self.specialization}"
+

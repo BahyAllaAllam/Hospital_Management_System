@@ -1,10 +1,12 @@
 from django.db import models
+import uuid
 from patients.models import Patient
 from doctors.models import Doctor
 from accounts.models import User
 
 
 class MedicalRecord(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='medical_records')
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -13,6 +15,7 @@ class MedicalRecord(models.Model):
 
 
 class DoctorNote(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     record = models.ForeignKey(MedicalRecord, on_delete=models.CASCADE, related_name='doctor_notes')
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     diagnosis = models.TextField()
@@ -25,6 +28,7 @@ class DoctorNote(models.Model):
 
 
 class NurseNote(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     record = models.ForeignKey(MedicalRecord, on_delete=models.CASCADE, related_name='nurse_notes')
     nurse = models.ForeignKey(User, on_delete=models.CASCADE)
     blood_pressure = models.CharField(max_length=20, blank=True)
@@ -49,6 +53,7 @@ class LabResult(models.Model):
         ('urine_test', 'Urine Test'),
         ('other', 'Other'),
     )
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     record = models.ForeignKey(MedicalRecord, on_delete=models.CASCADE, related_name='lab_results')
     technician = models.ForeignKey(User, on_delete=models.CASCADE)
     result_type = models.CharField(max_length=20, choices=TYPES)

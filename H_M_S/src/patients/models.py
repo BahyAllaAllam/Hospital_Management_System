@@ -1,5 +1,4 @@
-from django.db import models
-
+import uuid
 from django.db import models
 from accounts.models import User
 
@@ -10,6 +9,7 @@ class Patient(models.Model):
         ('O+', 'O+'), ('O-', 'O-'),
         ('AB+', 'AB+'), ('AB-', 'AB-'),
     ]
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_of_birth = models.DateField()
     blood_type = models.CharField(max_length=3, choices=BLOOD_TYPES)

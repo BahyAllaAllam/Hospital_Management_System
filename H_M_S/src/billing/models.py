@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 from patients.models import Patient
 from appointments.models import Appointment
 from accounts.models import User
@@ -10,6 +11,7 @@ class Invoice(models.Model):
         ('unpaid', 'Unpaid'),
         ('refunded', 'Refunded'),
     )
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE)
     total = models.DecimalField(max_digits=10, decimal_places=2)
@@ -24,6 +26,7 @@ class Invoice(models.Model):
 
 
 class InvoiceItem(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='items')
     description = models.CharField(max_length=200)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
