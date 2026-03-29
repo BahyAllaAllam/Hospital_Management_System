@@ -4,9 +4,17 @@ from rest_framework.response import Response
 from .models import MedicalRecord, DoctorNote, NurseNote, LabResult
 from .serializers import MedicalRecordSerializer, DoctorNoteSerializer, NurseNoteSerializer, LabResultSerializer
 from accounts.permissions import IsAdmin, IsDoctor, IsNurse, IsLab, IsRadiology, IsPatient
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from .filters import MedicalRecordFilter, DoctorNoteFilter, NurseNoteFilter, LabResultFilter
+
 
 class MedicalRecordViewSet(viewsets.ModelViewSet):
     serializer_class = MedicalRecordSerializer
+    filterset_class = MedicalRecordFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['patient__user__first_name', 'patient__user__last_name']
+    ordering_fields = ['created_at']
 
     def get_queryset(self):
         user = self.request.user
@@ -34,6 +42,10 @@ class MedicalRecordViewSet(viewsets.ModelViewSet):
 
 class DoctorNoteViewSet(viewsets.ModelViewSet):
     serializer_class = DoctorNoteSerializer
+    filterset_class = DoctorNoteFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['diagnosis', 'prescription']
+    ordering_fields = ['created_at']
 
     def get_queryset(self):
         user = self.request.user
@@ -55,6 +67,9 @@ class DoctorNoteViewSet(viewsets.ModelViewSet):
 
 class NurseNoteViewSet(viewsets.ModelViewSet):
     serializer_class = NurseNoteSerializer
+    filterset_class = NurseNoteFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    ordering_fields = ['created_at']
 
     def get_queryset(self):
         user = self.request.user
@@ -88,6 +103,10 @@ class NurseNoteViewSet(viewsets.ModelViewSet):
 
 class LabResultViewSet(viewsets.ModelViewSet):
     serializer_class = LabResultSerializer
+    filterset_class = LabResultFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['description']
+    ordering_fields = ['created_at', 'result_type']
 
     def get_queryset(self):
         user = self.request.user
