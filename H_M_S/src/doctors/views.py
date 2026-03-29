@@ -3,9 +3,17 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Doctor, Department
 from .serializers import DoctorSerializer, DepartmentSerializer
 from accounts.permissions import IsAdmin, IsDoctor
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from .filters import DoctorFilter, DepartmentFilter
+
 
 class DepartmentViewSet(viewsets.ModelViewSet):
     serializer_class = DepartmentSerializer
+    filterset_class = DepartmentFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = ['name']
 
     def get_queryset(self):
         return Department.objects.all()
@@ -18,7 +26,11 @@ class DepartmentViewSet(viewsets.ModelViewSet):
 
 class DoctorViewSet(viewsets.ModelViewSet):
     serializer_class = DoctorSerializer
-
+    filterset_class = DoctorFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['user__first_name', 'user__last_name', 'specialization']
+    ordering_fields = ['user__first_name', 'specialization']
+    
     def get_queryset(self):
         user = self.request.user
         if user.role == 'doctor':
