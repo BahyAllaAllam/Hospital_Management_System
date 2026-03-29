@@ -120,8 +120,9 @@ class LabResultViewSet(viewsets.ModelViewSet):
         if self.action in ['list', 'retrieve']:
             return [IsAuthenticated()]
         if self.action in ['create', 'update', 'partial_update']:
-            from accounts.permissions import IsLab, IsRadiology
-            return [IsAuthenticated(), IsLab() if request.user.role == 'lab' else IsRadiology()]
+            if self.request.user.is_authenticated:
+                return [IsAuthenticated(), IsLab() if self.request.user.role == 'lab' else IsRadiology()]
+            return [IsAuthenticated()]
         if self.action == 'destroy':
             return [IsAuthenticated(), IsAdmin()]
         return [IsAuthenticated(), IsAdmin()]
