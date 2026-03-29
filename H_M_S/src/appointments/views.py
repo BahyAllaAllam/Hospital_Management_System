@@ -4,9 +4,17 @@ from .models import Appointment
 from rest_framework.response import Response
 from .serializers import AppointmentSerializer, AppointmentSlotSerializer
 from accounts.permissions import IsAdmin, IsReceptionist, IsPatient, IsDoctor, IsNurse
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from .filters import AppointmentFilter
+
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     serializer_class = AppointmentSerializer
+    filterset_class = AppointmentFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['patient__user__first_name', 'patient__user__last_name', 'doctor__user__first_name']
+    ordering_fields = ['date', 'time', 'status']
 
     def get_serializer_class(self):
         if self.action == 'create':
