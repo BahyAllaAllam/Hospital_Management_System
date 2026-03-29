@@ -30,7 +30,7 @@ class DoctorViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     search_fields = ['user__first_name', 'user__last_name', 'specialization']
     ordering_fields = ['user__first_name', 'specialization']
-    
+
     def get_queryset(self):
         user = self.request.user
         if user.role == 'doctor':

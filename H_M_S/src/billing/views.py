@@ -5,9 +5,17 @@ from rest_framework.decorators import action
 from .models import Invoice, InvoiceItem
 from .serializers import InvoiceSerializer, InvoiceItemSerializer
 from accounts.permissions import IsAdmin, IsAdminOrSupervisor, IsReceptionist, IsAccountant, IsPatient, CanAccessBilling
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from .filters import InvoiceFilter
+
 
 class InvoiceViewSet(viewsets.ModelViewSet):
     serializer_class = InvoiceSerializer
+    filterset_class = InvoiceFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['patient__user__first_name', 'patient__user__last_name']
+    ordering_fields = ['created_at', 'total', 'status']
 
     def get_queryset(self):
         user = self.request.user
