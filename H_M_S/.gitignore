@@ -1,17 +1,33 @@
-# created by virtualenv automatically
-*.log
-.\Lib
-.\Scripts
-pyvenv.cfg
+# Python
+.pyvenv.cfg
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+.Python
+*.py[cod]
+
+# Virtual Environment
+venv/
+env/
+.\src\.env
+
+# Django
+*.log
+.\Lib
+.\Scripts
 .\src\db.sqlite3
-.\src\manage.py
-.\src\H_M_S\settings.py
+.\src\media
 .\src\account\migrations
 .\src\patients\migrations
 .\src\doctors\migrations
 .\src\appointments\migrations
 .\src\billing\migrations
 .\src\medical_records\migrations
+
+# Docker
+docker-compose.override.yml
+
+# IDE
+.vscode/
+.idea/
